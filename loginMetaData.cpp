@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	4/13/2016
+ * @date   	4/18/2016
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -82,7 +82,7 @@ namespace login
 			lv2->addElement(lv3);
 
 			lv3=os::smartXMLNode(new os::XML_Node("timestamp"),os::shared_type);
-			lv3->setData(std::to_string(it->getData()->timestamp));
+			lv3->setData(std::to_string((long long unsigned int)it->getData()->timestamp));
 			lv2->addElement(lv3);
 
 			lv1->addElement(lv2);

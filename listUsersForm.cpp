@@ -1,5 +1,5 @@
 //Primary author: Jonathan Bedard
-//Confirmed working: 3/9/2016
+//Confirmed working: 4/18/2016
 
 ///@cond INTERNAL
 
@@ -66,7 +66,7 @@ namespace login
 			if(usr->password=="") btnLoad.setY(height()-130);
 			else btnLoad.setY(height()-170);
 		}
-		else btnLoad.setX(INT_MIN);
+		else btnLoad.setX(~0);
 	}
 	//Received clicked element
 	void userFrame::receivedClicked(os::smart_ptr<element> elm)
