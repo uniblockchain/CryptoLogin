@@ -1,7 +1,7 @@
 /**
  * @file	loginMain.h
  * @author	Jonathan Bedard
- * @date   	4/13/2016
+ * @date   	4/20/2016
  * @brief	Entry login form
  * @bug	None
  *
@@ -119,6 +119,16 @@ namespace login{
 			}
 		}
 	public:
+		/** @brief New form constructor
+		 *
+		 * The login form must be the launch point of
+		 * any application which uses it.
+		 *
+		 * @param [in] argc Number of arguments to main
+		 * @param [in] argv String array of arguments to main
+		 * @param [in] title Title of form
+		 * @param [in] metaData Meta data defining login path
+		 */
 		mainLogin(int* argc, char** argv, std::string title,loginMetaData metaData):
 			form(argc,argv,500,400),_metaData(metaData),
 			lblTitle(this),lblUser(this),lblPassword(this),
@@ -205,9 +215,18 @@ namespace login{
 			//Load meta data (should be fast!)
 			_metaData.load();
 		}
+		/** @brief Virtual destructor
+         *
+         * Destructor must be virtual, if an object
+         * of this type is deleted, the destructor
+         * of the type which inherits this class should
+         * be called.
+         */
 		virtual ~mainLogin(){}
 
-		//Open next form
+		/** @brief Attempts to open the next form
+		 * @return void
+		 */
 		void openNextForm()
 		{
 			if(_metaData.currentUser())
@@ -216,45 +235,18 @@ namespace login{
 				open(os::smart_ptr<gl::form>(new nextForm(this,&_metaData),os::shared_type));
 			}
 			else open(os::smart_ptr<gl::form>(new gl::singleButtonPopUp(this,"Cannot login, no user!"),os::shared_type));
-
 		}
 
-		//Received events
+		/** @brief Trigger on button click
+		 * @param [in] elm Element clicked
+		 * @return void
+		 */
 		void receivedClicked(os::smart_ptr<element> elm)
 		{
 			//Login
 			if(elm==&btnLogin)
 			{
-				try
-				{
-					os::smart_ptr<crypto::user> usr=_metaData.openUser(tbxUser.trueText(),tbxPassword.trueText());
-					if(!usr) throw std::string("User could not be opened");
-					if(usr->numberErrors()>0) 
-					{
-						auto terr= usr->popError();
-						if(terr->errorTitle()=="Hash Compare")
-							throw std::string("Password incorrect");
-						throw terr->errorTitle();
-					}
-				}
-				catch(std::string str)
-				{
-					open(os::smart_ptr<gl::form>(new gl::singleButtonPopUp(this,str),os::shared_type));
-					_metaData.unbindUser();
-					return;
-				}
-				catch(...)
-				{
-					open(os::smart_ptr<gl::form>(new gl::singleButtonPopUp(this,"Unknown error when logging on"),os::shared_type));
-					_metaData.unbindUser();
-					return;
-				}
-
-				if(_metaData.needsSaving())
-				{
-					_metaData.pushDistributor(os::savable::getThread());
-					open(os::smart_ptr<gl::form>(new userLoadingPopUp(this,&_metaData),os::shared_type));
-				}
+				open(os::smart_ptr<gl::form>(new userLoadingPopUp(this,_metaData,tbxUser.trueText(),tbxPassword.trueText()),os::shared_type));
 				return;
 			}
 
@@ -262,14 +254,14 @@ namespace login{
 			if(elm==&btnNewUser)
 			{
 				//Open new user creation
-				open(os::smart_ptr<gl::form>(new createUser(this,lblTitle.text(),&_metaData),os::shared_type));
+				open(os::smart_ptr<gl::form>(new createUser(this,lblTitle.text(),_metaData),os::shared_type));
 				return;
 			}
 
 			//List users
 			if(elm==&btnListUsers)
 			{
-				open(os::smart_ptr<gl::form>(new listUsers(this,lblTitle.text(),&_metaData),os::shared_type));
+				open(os::smart_ptr<gl::form>(new listUsers(this,lblTitle.text(),_metaData),os::shared_type));
 				return;
 			}
 
@@ -280,6 +272,10 @@ namespace login{
 				return;
 			}
 		}
+		/** @brief Trigger on enter event
+		 * @param [in] elm Element receiving enter
+		 * @return void
+		 */
 		void receivedEnter(os::smart_ptr<element> elm)
 		{
 			//Allow a triple-enter login

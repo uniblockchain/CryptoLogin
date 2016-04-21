@@ -1,7 +1,7 @@
 /**
  * @file	keyGenerationPopUp.cpp
  * @author	Jonathan Bedard
- * @date   	4/12/2016
+ * @date   	4/21/2016
  * @brief	Key generation pop-up
  * @bug	None
  *
@@ -65,7 +65,42 @@ namespace login
 		}
 	}
 
-	userLoadingPopUp::userLoadingPopUp(os::smart_ptr<form> prev,os::smart_ptr<loginMetaData> met):
+	static void load_user_thread(void * usrload)
+	{
+		userLoadingPopUp* userLoading=(userLoadingPopUp*) usrload;
+		os::smart_ptr<gl::form> prev=userLoading->prev();
+		try
+		{
+			os::smart_ptr<crypto::user> usr=userLoading->meta->openUser(userLoading->username,userLoading->password);
+			if(!usr) throw std::string("User could not be opened");
+			if(usr->numberErrors()>0) 
+			{
+				auto terr= usr->popError();
+				if(terr->errorTitle()=="Hash Compare")
+					throw std::string("Password incorrect");
+				throw terr->errorTitle();
+			}
+		}
+		catch(std::string str)
+		{
+			userLoading->meta->unbindUser();
+			userLoading->close();
+			prev->open(os::smart_ptr<gl::form>(new gl::singleButtonPopUp(prev,str),os::shared_type));
+				
+			return;
+		}
+		catch(...)
+		{
+			userLoading->meta->unbindUser();
+			userLoading->close();
+			prev->open(os::smart_ptr<gl::form>(new gl::singleButtonPopUp(prev,"Unknown error when logging on"),os::shared_type));
+			return;
+		}
+		if(userLoading->meta->needsSaving())
+			userLoading->meta->save();
+	}
+
+	userLoadingPopUp::userLoadingPopUp(os::smart_ptr<form> prev,loginMetaData& met,std::string _username,std::string _password):
 		popUp(prev),lblLoadingUser(&popUpFrame())
 	{
 		lblLoadingUser.setWidth(popUpFrame().width());
@@ -76,8 +111,13 @@ namespace login
 		lblLoadingUser.setY(0);
 		lblLoadingUser.setText("Loading User");
 		setTitle("Loading User");
-		_meta=met;
 		dotCount=0;
+		meta=&met;
+
+		username=_username;
+		password=_password;
+
+		new os::singleAction(os::savable::getThread(),&load_user_thread,this);
 	}
 	void userLoadingPopUp::update()
 	{
@@ -89,12 +129,7 @@ namespace login
 			lblLoadingUser.setText("Loading User");
 
 		//Check if it is time to close
-		if(!_meta)
-		{
-			close();
-			return;
-		}
-		if(!_meta->needsSaving())
+		if(meta->currentUser() && !meta->needsSaving())
 		{
 			close();
 			return;

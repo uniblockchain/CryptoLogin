@@ -47,8 +47,6 @@ namespace login
 	 * by using "login::loginerr" as one would use "std::cerr."
 	 */
 	std::ostream& loginerr_func();
-	/** @brief 
-	 */
 }
 
 #ifndef loginout

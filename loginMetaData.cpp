@@ -41,6 +41,7 @@ namespace login
 		cpy.lock.increment();
 		defaultUsername=cpy.defaultUsername;
 		defaultPassword=cpy.defaultPassword;
+		_currentUser=cpy._currentUser;
 
 		_savePath=cpy._savePath;
 		users.insert(&cpy.users);

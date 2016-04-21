@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	3/7/2016
+ * @date   	4/21/2016
  * @brief	Implements the user creation form
  * @bug	None
  *
@@ -23,12 +23,12 @@ using namespace gl;
 namespace login
 {
 	//Create user constructor
-	createUser::createUser(gl::form* master,std::string baseTitle,loginMetaData* metaDataPointer):gl::navForm(master),
+	createUser::createUser(gl::form* master,std::string baseTitle,loginMetaData& md):gl::navForm(master),
 		lblUser(this),tbxUser(this),indUser(this),
 		lblPassword1(this),tbxPassword1(this),indPassword(this),
 		lblPassword2(this),tbxPassword2(this),
 		btnRSA128(this),btnRSA256(this),btnRSA512(this),
-		btnQuit(this),btnCreate(this),metaData(*metaDataPointer)
+		btnQuit(this),btnCreate(this),metaData(md)
 	{
 		setTitle(baseTitle+": New User");
 		

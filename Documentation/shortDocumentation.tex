@@ -1,0 +1,32 @@
+\part{CryptoLogin Library} \label{sec:cryptologin}
+
+	\chapter{Introduction}
+
+	The CryptoLogin library contains a series of forms and support class used to open, manage and edit users.  These forms utilize the Datastructures, osMechanics, CryptoGateway and glGraphics libraries.
+
+		\section{Unit Testing} \label{sec:unit-testing}
+		Currently, the CryptoLogin library is not tested.  In the future, the CryptoLogin will leverage the testing functionality of the glGraphics library to preform basic testing on the forms through the headless testing interface in glGraphics.
+		
+		\section{Namespace login} \label{sec:Namespace}
+		This namespace contains forms used for both logging in and visualizing the basics of a user.  Note that the initial entry form is a template class so that the login namespace can open any form when logging in.  It is expected that the subsequent form will provide opportunities for the user to open some of the user editing forms provided by the login namespace.
+		
+		\renewcommand{\DOXYGENFOLDER}{../../CryptoLogin/Documentation/doxygenFiles/latex/}
+
+	\chapter{File Index}
+		\subimport{\DOXYGENFOLDER}{files}
+	
+	%File Documentation
+	\chapter{File Documentation}
+	
+		\subimport{\DOXYGENFOLDER}{createUserForm_8cpp}
+		\subimport{\DOXYGENFOLDER}{createUserForm_8h}
+		\subimport{\DOXYGENFOLDER}{cryptoLogin_8h}
+		\subimport{\DOXYGENFOLDER}{cryptoLoginLog_8h}
+		\subimport{\DOXYGENFOLDER}{keyGenerationPopUp_8cpp}
+		\subimport{\DOXYGENFOLDER}{keyGenerationPopUp_8h}
+		\subimport{\DOXYGENFOLDER}{listUsersForm_8cpp}
+		\subimport{\DOXYGENFOLDER}{listUsersForm_8h}
+		\subimport{\DOXYGENFOLDER}{loginMain_8cpp}
+		\subimport{\DOXYGENFOLDER}{loginMain_8h}
+		\subimport{\DOXYGENFOLDER}{loginMetaData_8cpp}
+		\subimport{\DOXYGENFOLDER}{loginMetaData_8h}

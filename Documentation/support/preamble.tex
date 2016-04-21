@@ -1,0 +1,98 @@
+% Includes installed packages and macros
+
+% Packages required by doxygen
+	\usepackage{fixltx2e}
+	\usepackage{calc}
+	\usepackage{support/doxygen}
+	\usepackage[export]{adjustbox} % also loads graphicx
+	\usepackage{graphicx}
+	\usepackage[utf8]{inputenc}
+	\usepackage{makeidx}
+	\usepackage{multicol}
+	\usepackage{multirow}
+	\PassOptionsToPackage{warn}{textcomp}
+	\usepackage{textcomp}
+	\usepackage[nointegrals]{wasysym}
+	\usepackage[table]{xcolor}
+
+	% Font selection
+	\usepackage[T1]{fontenc}
+	\usepackage[scaled=.90]{helvet}
+	\usepackage{courier}
+	\usepackage{amssymb}
+	\usepackage{sectsty}
+	\renewcommand{\familydefault}{\sfdefault}
+	\allsectionsfont{%
+	  \fontseries{bc}\selectfont%
+	  \color{darkgray}%
+	}
+	\renewcommand{\DoxyLabelFont}{%
+	  \fontseries{bc}\selectfont%
+	  \color{darkgray}%
+	}
+	\newcommand{\+}{\discretionary{\mbox{\scriptsize$\hookleftarrow$}}{}{}}
+
+	% Custom commands
+	\newcommand{\clearemptydoublepage}{%
+	  \newpage{\pagestyle{empty}\cleardoublepage}%
+	}
+
+	\usepackage{caption}
+	\captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
+
+%Doxygen Includes
+\newcommand{\DOXYGENFOLDER}{NoDir}
+\usepackage{import}
+
+% Geometry:
+\usepackage[a4paper]{geometry}
+
+% AMS math packages:
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{fixltx2e}
+
+
+% Graphicx:
+\usepackage{tikz}
+\usepackage{graphicx}
+
+% Booktabs:
+\usepackage{booktabs}
+
+% SIunitx:
+\usepackage{siunitx}
+
+% URL:
+\usepackage{url}
+
+% Caption:
+\usepackage{caption}
+
+% Hyperref:
+\usepackage{hyperref}
+	\hypersetup{colorlinks=false,pdfborder=0 0 0}
+
+% Cleveref:
+\usepackage{cleveref}
+	\crefname{equation}{equation}{equations}
+	\crefname{figure}{figure}{figures}	
+	\crefname{table}{table}{tables}
+	\usepackage{multirow}
+	
+%Figure stuff
+\usepackage{float}
+\floatstyle{boxed} 
+\restylefloat{figure}
+
+% Tab
+\usepackage{tabto}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+% Fonts
+\usepackage{txfonts}
+% Boolean usage
+\usepackage{etoolbox}
+	\newtoggle{PROBLEM_STATEMENT} \togglefalse{PROBLEM_STATEMENT}

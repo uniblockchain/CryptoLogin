@@ -1,5 +1,14 @@
-//Primary author: Jonathan Bedard
-//Confirmed working: 4/18/2016
+/**
+ * @file	listUsers.cpp
+ * @author	Jonathan Bedard
+ * @date   	4/21/2016
+ * @brief	Implementation of user-list form
+ * @bug	None
+ *
+ * Implements a form to list and load users which this
+ * application is aware of.  Consult listUserForm.h for
+ * details.
+ **/
 
 ///@cond INTERNAL
 
@@ -102,8 +111,8 @@ namespace login
 //List Users Form------------------------------------------------------------
 
 	//Create user constructor
-	listUsers::listUsers(gl::form* master,std::string baseTitle,loginMetaData* metaDataPointer):gl::navForm(master),
-		metaData(*metaDataPointer),scrArea(this)
+	listUsers::listUsers(gl::form* master,std::string baseTitle,loginMetaData& metaDataPointer):gl::navForm(master),
+		metaData(metaDataPointer),scrArea(this)
 	{
 		//Set up basics
 		setTitle(baseTitle+": List User");

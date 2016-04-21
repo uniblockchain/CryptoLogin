@@ -1,5 +1,5 @@
 //Primary author: Jonathan Bedard
-//Confirmed working: 1/25/2016
+//Confirmed working: 4/21/2016
 
 #ifndef CREATE_USER_FORM_H
 #define CREATE_USER_FORM_H
@@ -35,7 +35,7 @@ namespace login{
 	protected:
 		void update();
 	public:
-		createUser(gl::form* master,std::string baseTitle,loginMetaData* metaDataPointer);
+		createUser(gl::form* master,std::string baseTitle,loginMetaData& md);
 		virtual ~createUser(){}
 
 		//Update indicators
