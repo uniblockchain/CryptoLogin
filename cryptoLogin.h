@@ -15,5 +15,6 @@
 #include "cryptoLoginLog.h"
 #include "loginMain.h"
 #include "loginMetaData.h"
+#include "manageKeysForm.h"
 
 #endif

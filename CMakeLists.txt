@@ -22,6 +22,7 @@ SET( SRC_H
 	${CUR_SRC}/createUserForm.h
 	${CUR_SRC}/listUsersForm.h
 	${CUR_SRC}/keyGenerationPopUp.h
+	${CUR_SRC}/manageKeysForm.h
 )
 
 SET( SRC_CPP
@@ -30,6 +31,7 @@ SET( SRC_CPP
 	${CUR_SRC}/createUserForm.cpp
 	${CUR_SRC}/listUsersForm.cpp
 	${CUR_SRC}/keyGenerationPopUp.cpp
+	${CUR_SRC}/manageKeysForm.cpp
 )
 
 ADD_LIBRARY( CryptoLogin STATIC
