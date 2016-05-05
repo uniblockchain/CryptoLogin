@@ -41,7 +41,7 @@ namespace login
 		
 		lblTitle.setHeight(60);
 		lblTitle.setX(10);
-		lblTitle.setText(pbkfrm->algorithmName()+" "+std::to_string(32*pbkfrm->keySize())+" bit");
+		lblTitle.setText(pbkfrm->algorithmName()+" "+std::to_string((long long unsigned int)32*pbkfrm->keySize())+" bit");
 
 		btnExpand.setText("Expand");
 		btnExpand.setX(200);
@@ -298,10 +298,10 @@ namespace login
 		chgHash.setTitle("Hash type");
 		chgHash.setX(30);
 		chgHash.setWidth(180);
-		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string(8*crypto::size::hash64)+" bit");
-		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string(8*crypto::size::hash128)+" bit");
-		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string(8*crypto::size::hash256)+" bit");
-		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string(8*crypto::size::hash512)+" bit");
+		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string((long long unsigned int)8*crypto::size::hash64)+" bit");
+		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string((long long unsigned int)8*crypto::size::hash128)+" bit");
+		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string((long long unsigned int)8*crypto::size::hash256)+" bit");
+		chgHash.addString(crypto::RCFour::staticAlgorithmName()+" "+std::to_string((long long unsigned int)8*crypto::size::hash512)+" bit");
 		chgHash.setChoice(gl::checkbox_chooseOne);
 		int hshMark=0;
 		switch(_userData->streamPackage()->hashSize())
@@ -379,10 +379,10 @@ namespace login
 		lblPublicKeyHash.setHeight(20);
 		lblPublicKey.setHeight(20);
 
-		lblPublicKeyTitle.setText("Default public key is "+pbk->algorithmName()+" "+std::to_string(pbk->size()*32)+" bit");
+		lblPublicKeyTitle.setText("Default public key is "+pbk->algorithmName()+" "+std::to_string((long long unsigned int)pbk->size()*32)+" bit");
 		
 		//Pull the hash
-		lblPublicKeyHashDescriptor.setText(_userData->streamPackage()->hashAlgorithmName()+" "+std::to_string(8*_userData->streamPackage()->hashSize())+" bit hash of public-key:");
+		lblPublicKeyHashDescriptor.setText(_userData->streamPackage()->hashAlgorithmName()+" "+std::to_string((long long unsigned int)8*_userData->streamPackage()->hashSize())+" bit hash of public-key:");
 		unsigned int len;
 		auto pbkData=pbk->getN()->getCompCharData(len);
 		std::string hshStr;
