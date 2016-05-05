@@ -75,7 +75,7 @@ namespace login
 			if(usr->password=="") btnLoad.setY(height()-130);
 			else btnLoad.setY(height()-170);
 		}
-		else btnLoad.setX(~0);
+		else btnLoad.disable();
 	}
 	//Received clicked element
 	void userFrame::receivedClicked(os::smart_ptr<element> elm)
