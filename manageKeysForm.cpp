@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	5/3/2016
+ * @date   	5/5/2016
  * @brief	Implements key management form
  * @bug	None
  *
@@ -45,6 +45,8 @@ namespace login
 
 		btnExpand.setText("Expand");
 		btnExpand.setX(200);
+		btnExpand.pushClickedListener(this);
+		btnExpand.pushEnterListener(this);
 		addMouseListener(&btnExpand);
 		addKeyboardListener(&btnExpand);
 
@@ -71,6 +73,10 @@ namespace login
 
 		saveTrigger=false;
 		setHeight(60);
+
+		expanded=false;
+
+		updateKeyList();
 		resize();
 	}
 	//Triggered when a key is finished generating
@@ -82,17 +88,117 @@ namespace login
 		saveTrigger=true;
 		masterForm->refreshDefaultPublicKeys();
 	}
+	//Update the key list
+	void publicKeyTypeFrame::updateKeyList()
+	{
+		auto temp=timestampList.getFirst();
+		while(temp)
+		{
+			timestampList.findDelete(temp->getData());
+			temp=timestampList.getFirst();
+		}
+		temp=keyList.getFirst();
+		while(temp)
+		{
+			keyList.findDelete(temp->getData());
+			temp=keyList.getFirst();
+		}
+		timestampList=os::unsortedList<gl::label>();
+		keyList=os::unsortedList<gl::label>();
+
+		//Expanded case
+		if(expanded)
+		{
+			btnExpand.setText("Collapse");
+			os::smart_ptr<gl::label> lblCurrent;
+
+			//No public key
+			if(!_pbk)
+			{
+				lblCurrent=os::smart_ptr<gl::label>(new gl::label(this),os::shared_type);
+				lblCurrent->setHeight(30);
+				lblCurrent->setText("No keys of this type");
+				lblCurrent->setX(30);
+				keyList.insert(lblCurrent);
+				setHeight(110);
+			}
+			else if(!_pbk->getN())
+			{
+				lblCurrent=os::smart_ptr<gl::label>(new gl::label(this),os::shared_type);
+				lblCurrent->setHeight(30);
+				lblCurrent->setText("Generating keys, hang tight!");
+				lblCurrent->setX(30);
+				keyList.insert(lblCurrent);
+				setHeight(110);
+			}
+			else
+			{
+				unsigned int hist=crypto::publicKey::CURRENT_INDEX;
+				int newSize=65;
+				os::smart_ptr<crypto::number> num=_pbk->getOldD(hist);
+				while(num)
+				{
+					num=_pbk->copyConvert(num);
+					num->reduce();
+
+					//Key list
+					std::string temp=num->toString();
+					lblCurrent=os::smart_ptr<gl::label>(new gl::label(this),os::shared_type);
+					lblCurrent->setHeight(30);
+					int breaks=_pbk->size()/4-1;
+					int breakPos=4*9-1;
+					for(int i=0;i<breaks;i++)
+					{
+						temp[breakPos]='\n';
+						breakPos+=4*9;
+						lblCurrent->setHeight(lblCurrent->height()+25);
+					}
+					lblCurrent->setText(temp);
+					lblCurrent->setX(250);
+					keyList.insert(lblCurrent);
+					newSize+=lblCurrent->height()+10;
+
+					//Timestamp
+					lblCurrent=os::smart_ptr<gl::label>(new gl::label(this),os::shared_type);
+					lblCurrent->setHeight(30);
+					lblCurrent->setText(os::convertTimestamp(_pbk->getOldTimestamp(hist)));
+					lblCurrent->setX(20);
+					timestampList.insert(lblCurrent);
+
+					hist++;
+					num=_pbk->getOldN(hist);
+				}
+				setHeight(newSize);
+			}
+		}
+		//Colapse case
+		else
+		{
+			btnExpand.setText("Expand");
+			setHeight(60);
+		}
+		masterForm->resize();
+	}
+	//Triggers every update cycle
 	void publicKeyTypeFrame::update()
 	{
 		if(saveTrigger && _pbk)
 		{
 			saveTrigger=false;
 			_pbk->save();
+			updateKeyList();
 		}
 	}
 	//Received click event
 	void publicKeyTypeFrame::receivedClicked(os::smart_ptr<element> elm)
 	{
+		//Expand node
+		if(elm==&btnExpand)
+		{
+			expanded=!expanded;
+			updateKeyList();
+			return;
+		}
 		//Generate keys
 		if(elm==&btnGenerate)
 		{
@@ -137,6 +243,21 @@ namespace login
 		btnExpand.setY(trc);
 		btnGenerate.setY(trc);
 		btnSetDefault.setY(trc);
+
+		auto trc1=keyList.getFirst();
+		auto trc2=timestampList.getFirst();
+		while(trc1)
+		{
+			if(trc2)
+				trc2->getData()->setY(trc-trc2->getData()->height());
+			trc-=trc1->getData()->height();
+			trc1->getData()->setY(trc);
+			
+			trc1=trc1->getNext();
+			if(trc2)
+				trc2=trc2->getNext();
+			trc-=10;
+		}
 	}
 
 	//Create user constructor

@@ -1,5 +1,5 @@
 //Primary author: Jonathan Bedard
-//Confirmed working: 5/3/2016
+//Confirmed working: 5/5/2016
 
 #ifndef MANAGE_KEYS_FORM_H
 #define MANAGE_KEYS_FORM_H
@@ -23,6 +23,7 @@ namespace login{
 		os::unsortedList<gl::label> keyList;
 
 		bool saveTrigger;
+		bool expanded;
 
 		void updateKeyList();
 	protected:
