@@ -1,7 +1,7 @@
 /**
  * @file	keyGenerationPopUp.cpp
  * @author	Jonathan Bedard
- * @date   	4/21/2016
+ * @date   	5/8/2016
  * @brief	Key generation pop-up
  * @bug	None
  *
@@ -49,17 +49,20 @@ namespace login
 		//Check if it is time to close
 		if(!_user)
 		{
+			os::sleep(250);
 			close();
 			return;
 		}
 		if(!_user->getDefaultPublicKey())
 		{
+			os::sleep(250);
 			close();
 			return;
 		}
 		if(!_user->getDefaultPublicKey()->generating())
 		{
 			_user->getDefaultPublicKey()->save();
+			os::sleep(250);
 			close();
 			return;
 		}
@@ -131,6 +134,7 @@ namespace login
 		//Check if it is time to close
 		if(meta->currentUser() && !meta->needsSaving())
 		{
+			os::sleep(250);
 			close();
 			return;
 		}
