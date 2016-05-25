@@ -6,6 +6,8 @@
 *.toc
 *.lof
 *.dvi
+*.bbl
+*.blg
 doxygenFiles/
 
 # Debug/Release
