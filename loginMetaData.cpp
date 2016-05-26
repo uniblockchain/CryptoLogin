@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	4/18/2016
+ * @date   	5/26/2016
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -102,11 +102,11 @@ namespace login
 		os::smart_ptr<std::string> arr=os::list_files(_savePath+"/"+USERS_FOLDER,arrayLen);
 
 		//First, chop off excess parts
-		for(unsigned int i=0;i<arrayLen;i++)
+		for(unsigned int i=0;i<arrayLen;++i)
 			arr[i]=os::extract_name(arr[i]);
 
 		//Next, add all read directories to list
-		for(unsigned int i=0;i<arrayLen;i++)
+		for(unsigned int i=0;i<arrayLen;++i)
 		{
 			os::smart_ptr<userNode> usNode(new userNode(arr[i]),os::shared_type);
 			usNode->userExists=true;
@@ -117,7 +117,7 @@ namespace login
 		for(auto trc=users.getFirst();trc;trc=trc->getNext())
 		{
 			trc->getData()->userExists=false;
-			for(unsigned int i=0;i<arrayLen && !trc->getData()->userExists;i++)
+			for(unsigned int i=0;i<arrayLen && !trc->getData()->userExists;++i)
 			{
 				if(arr[i]==trc->getData()->username)
 					trc->getData()->userExists=true;

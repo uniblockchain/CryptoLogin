@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	5/5/2016
+ * @date   	5/26/2016
  * @brief	Implements key management form
  * @bug	None
  *
@@ -147,7 +147,7 @@ namespace login
 					lblCurrent->setHeight(30);
 					int breaks=_pbk->size()/4-1;
 					int breakPos=4*9-1;
-					for(int i=0;i<breaks;i++)
+					for(int i=0;i<breaks;++i)
 					{
 						temp[breakPos]='\n';
 						breakPos+=4*9;
@@ -400,7 +400,7 @@ namespace login
 			breaks=3;
 			breakPos=96;
 		}
-		for(int i=0;i<breaks;i++)
+		for(int i=0;i<breaks;++i)
 		{
 			hshStr=hshStr.substr(0,breakPos)+"\n"+hshStr.substr(breakPos,hshStr.length()-breakPos);
 			breakPos-=32;
@@ -415,7 +415,7 @@ namespace login
 		std::string pbkstr=num->toString();
 		breaks=pbk->size()/4-1;
 		breakPos=4*9-1;
-		for(int i=0;i<breaks;i++)
+		for(int i=0;i<breaks;++i)
 		{
 			pbkstr[breakPos]='\n';
 			breakPos+=4*9;
@@ -456,7 +456,7 @@ namespace login
 			uint16_t sz=2;
 
 			//Search for clicked element
-			for(int i=0;i<chgHash.numString();i++)
+			for(int i=0;i<chgHash.numString();++i)
 			{
 				if(chgHash[i]) sz=i;
 			}
