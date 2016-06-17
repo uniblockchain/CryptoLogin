@@ -1,5 +1,5 @@
 //Primary author: Jonathan Bedard
-//Confirmed working: 5/5/2016
+//Confirmed working: 6/16/2016
 
 #ifndef MANAGE_KEYS_FORM_H
 #define MANAGE_KEYS_FORM_H
@@ -37,13 +37,18 @@ namespace login{
 		gl::button btnSetDefault;
 
 		publicKeyTypeFrame(os::smart_ptr<userSettingsForm> master,os::smart_ptr<crypto::user> usr, os::smart_ptr<crypto::publicKeyPackageFrame> pbkfrm);
-		virtual ~publicKeyTypeFrame(){if(_pbk)_pbk->save();}
+		virtual ~publicKeyTypeFrame()throw(){if(_pbk)_pbk->save();}
 
 		//Received events
 		void receivedClicked(os::smart_ptr<element> elm);
 		void receivedEnter(os::smart_ptr<element> elm);
 
 		void resize();
+        
+        #undef CURRENT_CLASS
+        #define CURRENT_CLASS publicKeyTypeFrame
+        POINTER_COMPARE
+        COMPARE_OPERATORS
 	};
 	//User settings
 	class userSettingsForm: public gl::navForm, public gl::enterListener
