@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	4/13/2016
+ * @date   	7/4/2016
  * @brief	Contains meta-data for login form
  * @bug	None
  *
@@ -137,7 +137,7 @@ namespace login{
 		 * Allows for both reading and writing
 		 * to occur asynchronously
 		 */
-		os::multiLock lock;
+		os::readWriteLock lock;
 
 
 		/** @brief Meta-data constructor
@@ -157,7 +157,7 @@ namespace login{
          * of the type which inherits this class should
          * be called.
          */
-		virtual ~loginMetaData(){}
+		virtual ~loginMetaData() throw() {}
 
 		/** @brief Loads meta-data from XML file
 		 *
