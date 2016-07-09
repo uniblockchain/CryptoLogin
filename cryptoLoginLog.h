@@ -1,7 +1,7 @@
 /**
  * @file	cryptoLoginLog.h
  * @author	Jonathan Bedard
- * @date   	4/12/2016
+ * @date   	7/9/2016
  * @brief	Logging for login namespace
  * @bug	None
  *
@@ -12,7 +12,7 @@
 #ifndef CRYPTO_LOGIN_LOG_H
 #define CRYPTO_LOGIN_LOG_H
 
-#include "Datastructures.h"
+#include "Datastructures/Datastructures.h"
 #include <iostream>
 
 namespace login
