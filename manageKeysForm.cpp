@@ -133,7 +133,7 @@ namespace login
 			}
 			else
 			{
-				unsigned int hist=crypto::publicKey::CURRENT_INDEX;
+				size_t hist=crypto::publicKey::CURRENT_INDEX;
 				int newSize=65;
 				os::smart_ptr<crypto::number> num=_pbk->getOldD(hist);
 				while(num)
@@ -383,7 +383,7 @@ namespace login
 		
 		//Pull the hash
 		lblPublicKeyHashDescriptor.setText(_userData->streamPackage()->hashAlgorithmName()+" "+std::to_string((long long unsigned int)8*_userData->streamPackage()->hashSize())+" bit hash of public-key:");
-		unsigned int len;
+		size_t len;
 		auto pbkData=pbk->getN()->getCompCharData(len);
 		std::string hshStr;
 		crypto::hash hsh=_userData->streamPackage()->hashData(pbkData.get(),len);
