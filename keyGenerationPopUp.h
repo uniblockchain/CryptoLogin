@@ -1,7 +1,7 @@
 /**
  * @file	keyGenerationPopUp.h
  * @author	Jonathan Bedard
- * @date   	4/21/2016
+ * @date   	8/29/2016
  * @brief	Various crypto-graphic pop-ups
  * @bug	None
  *
@@ -14,7 +14,7 @@
 #ifndef KEY_GENERATION_POP_UP_H
 #define KEY_GENERATION_POP_UP_H
 
-#include "glLibrary.h"
+#include "glGraphics/glLibrary.h"
 #include "loginMetaData.h"
 
 namespace login{

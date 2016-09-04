@@ -1,7 +1,7 @@
 /**
  * @file	listUsers.h
  * @author	Jonathan Bedard
- * @date   	4/21/2016
+ * @date   	8/28/2016
  * @brief	User-list header
  * @bug	None
  *
@@ -12,7 +12,7 @@
 #ifndef LIST_USERS_FORM_H
 #define LIST_USERS_FORM_H
 
-#include "glLibrary.h"
+#include "glGraphics/glLibrary.h"
 #include "loginMetaData.h"
 
 namespace login{
@@ -82,12 +82,18 @@ namespace login{
 		 */
 		void receivedEnter(os::smart_ptr<element> elm){receivedClicked(elm);}
 
-		bool operator==(const userFrame& usr){return *_user==*(usr._user);}
-		bool operator!=(const userFrame& usr){return *_user!=*(usr._user);}
-		bool operator<(const userFrame& usr){return *_user<*(usr._user);}
-		bool operator>(const userFrame& usr){return *_user>*(usr._user);}
-		bool operator<=(const userFrame& usr){return *_user<=*(usr._user);}
-		bool operator>=(const userFrame& usr){return *_user>=*(usr._user);}
+        #undef CURRENT_CLASS
+        #define CURRENT_CLASS userFrame
+        /** @brief Compare two user frames
+          * @param [in] usr User frame to compare
+          * @return Integer comparison of users
+          */
+        int compare(const userFrame& usr) const{return _user->compare(*usr._user);}
+        /** @brief Cast user to size_t
+          * @return Hashed size_t from the user
+          */
+        operator size_t() const {return (size_t) *_user;}
+        COMPARE_OPERATORS
 	};
 
 	/** @brief List-user form
@@ -115,7 +121,7 @@ namespace login{
 		loginMetaData& metaData;
 		/** @brief User frames to be displayed
 		 */
-		os::smartSet<userFrame> frameDisplay;
+		os::pointerSet<userFrame> frameDisplay;
 
 		/** @brief Rebuild form from meta-data
 		 * @return void
@@ -140,7 +146,7 @@ namespace login{
          * of the type which inherits this class should
          * be called.
          */
-		virtual ~listUsers(){}
+		virtual ~listUsers() throw(){}
 	};
 
 };

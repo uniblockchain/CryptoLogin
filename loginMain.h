@@ -1,7 +1,7 @@
 /**
  * @file	loginMain.h
  * @author	Jonathan Bedard
- * @date   	4/20/2016
+ * @date   	8/29/2016
  * @brief	Entry login form
  * @bug	None
  *
@@ -16,7 +16,7 @@
 #ifndef LOGIN_MAIN_H
 #define LOGIN_MAIN_H
 
-#include "glLibrary.h"
+#include "glGraphics/glLibrary.h"
 #include "loginMetaData.h"
 #include "createUserForm.h"
 #include "listUsersForm.h"

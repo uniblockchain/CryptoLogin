@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	5/26/2016
+ * @date   	8/29/2016
  * @brief	Implements key management form
  * @bug	None
  *
@@ -17,7 +17,7 @@
 
 #include "cryptoLoginLog.h"
 #include "manageKeysForm.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 
 using namespace gl;
 
@@ -91,20 +91,20 @@ namespace login
 	//Update the key list
 	void publicKeyTypeFrame::updateKeyList()
 	{
-		auto temp=timestampList.getFirst();
+		auto temp=timestampList.first();
 		while(temp)
 		{
-			timestampList.findDelete(temp->getData());
-			temp=timestampList.getFirst();
+			timestampList.remove(&temp);
+			temp=timestampList.first();
 		}
-		temp=keyList.getFirst();
+		temp=keyList.first();
 		while(temp)
 		{
-			keyList.findDelete(temp->getData());
-			temp=keyList.getFirst();
+			keyList.remove(&temp);
+			temp=keyList.first();
 		}
-		timestampList=os::unsortedList<gl::label>();
-		keyList=os::unsortedList<gl::label>();
+		timestampList=os::pointerUnsortedList<gl::label>();
+		keyList=os::pointerUnsortedList<gl::label>();
 
 		//Expanded case
 		if(expanded)
@@ -244,18 +244,18 @@ namespace login
 		btnGenerate.setY(trc);
 		btnSetDefault.setY(trc);
 
-		auto trc1=keyList.getFirst();
-		auto trc2=timestampList.getFirst();
+		auto trc1=keyList.first();
+		auto trc2=timestampList.first();
 		while(trc1)
 		{
 			if(trc2)
-				trc2->getData()->setY(trc-trc2->getData()->height());
-			trc-=trc1->getData()->height();
-			trc1->getData()->setY(trc);
+				trc2->setY(trc-trc2->height());
+			trc-=trc1->height();
+			trc1->setY(trc);
 			
-			trc1=trc1->getNext();
+            ++trc1;
 			if(trc2)
-				trc2=trc2->getNext();
+				++trc2;
 			trc-=10;
 		}
 	}
@@ -512,8 +512,8 @@ namespace login
 		lgap+=(20+chgStreamType.height());
 		lgap+=(20+chgHash.height());
 		if(lgap>trcHei) trcHei=lgap;
-		for(auto it=frameList.getFirst();it;it=it->getNext())
-			trcHei+=it->getData()->height()+10;
+		for(auto it=frameList.first();it;++it)
+			trcHei+=it->height()+10;
 
 		//Set y position
 		if(trcHei>scrArea.height()+5)
@@ -546,12 +546,12 @@ namespace login
 
 		//Public key frames
 		trcHei=lgap;
-		for(auto it=frameList.getFirst();it;it=it->getNext())
+		for(auto it=frameList.first();it;++it)
 		{
-			trcHei-=it->getData()->height()+10;
-			it->getData()->setY(trcHei);
-			it->getData()->setWidth(width()-20);
-			it->getData()->setX(20);
+			trcHei-=it->height()+10;
+			it->setY(trcHei);
+			it->setWidth(width()-20);
+			it->setX(20);
 		}
 	}
 

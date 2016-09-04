@@ -17,7 +17,7 @@
 
 #include "cryptoLoginLog.h"
 #include "keyGenerationPopUp.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 
 using namespace gl;
 

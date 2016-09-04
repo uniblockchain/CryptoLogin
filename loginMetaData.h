@@ -15,7 +15,7 @@
 #ifndef LOGIN_META_DATA_H
 #define LOGIN_META_DATA_H
 
-#include "CryptoGateway.h"
+#include "CryptoGateway/CryptoGateway.h"
 #include <string>
 
 namespace login{
@@ -71,30 +71,18 @@ namespace login{
 		 */
 		uint64_t timestamp;
 
-		/** @brief == by username
-		 * @return username==usr.username
-		 */
-		bool operator==(const userNode& usr){return username==usr.username;}
-		/** @brief == by username
-		 * @return username==usr.username
-		 */
-		bool operator!=(const userNode& usr){return username!=usr.username;}
-		/** @brief != by username
-		 * @return username!=usr.username
-		 */
-		bool operator<(const userNode& usr){return username<usr.username;}
-		/** @brief> by username
-		 * @return username<usr.username
-		 */
-		bool operator>(const userNode& usr){return username>usr.username;}
-		/** @brief <= by username
-		 * @return username<=usr.username
-		 */
-		bool operator<=(const userNode& usr){return username<=usr.username;}
-		/** @brief >= by username
-		 * @return username>=usr.username
-		 */
-		bool operator>=(const userNode& usr){return username>=usr.username;}
+        #undef CURRENT_CLASS
+        #define CURRENT_CLASS userNode
+        /** @brief Compare two user nodes
+         * @param [in] usr User node to compare
+         * @return Integer comparison of users
+         */
+        int compare(const userNode& usr) const{return username.compare(usr.username);}
+        /** @brief Cast user to size_t
+         * @return Hashed size_t from the user
+         */
+        operator size_t() const {return os::hashData(username.c_str(),username.length());}
+        COMPARE_OPERATORS
 	};
 
 	/** @brief Login meta-data class
@@ -120,7 +108,7 @@ namespace login{
 		 * Stores all users in a list to
 		 * be logged into.
 		 */
-		os::asyncAVLTree<userNode> users;
+		os::pointerAVLTreeThreadSafe<userNode> users;
 		/** @brief Defaut username
 		 */
 		std::string defaultUsername;

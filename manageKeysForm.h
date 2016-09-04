@@ -1,10 +1,10 @@
 //Primary author: Jonathan Bedard
-//Confirmed working: 6/16/2016
+//Confirmed working: 8/29/2016
 
 #ifndef MANAGE_KEYS_FORM_H
 #define MANAGE_KEYS_FORM_H
 
-#include "glLibrary.h"
+#include "glGraphics/glLibrary.h"
 #include "loginMetaData.h"
 
 namespace login{
@@ -19,8 +19,8 @@ namespace login{
 		os::smart_ptr<crypto::publicKeyPackageFrame> _pbkFrame;
 		os::smart_ptr<crypto::publicKey> _pbk;
 
-		os::unsortedList<gl::label> timestampList;
-		os::unsortedList<gl::label> keyList;
+		os::pointerUnsortedList<gl::label> timestampList;
+		os::pointerUnsortedList<gl::label> keyList;
 
 		bool saveTrigger;
 		bool expanded;
@@ -48,6 +48,7 @@ namespace login{
         #undef CURRENT_CLASS
         #define CURRENT_CLASS publicKeyTypeFrame
         POINTER_COMPARE
+        POINTER_HASH_CAST
         COMPARE_OPERATORS
 	};
 	//User settings
@@ -59,7 +60,7 @@ namespace login{
 		gl::scrollArea scrArea;
 
 		void refreshDefaultPublicKeys();
-		os::unsortedList<publicKeyTypeFrame> frameList;
+		os::pointerUnsortedList<publicKeyTypeFrame> frameList;
 	protected:
 		void update();
 	public:
@@ -74,7 +75,7 @@ namespace login{
 		gl::label lblPublicKey;
 
 		userSettingsForm(gl::form* master,os::smart_ptr<crypto::user> ud);
-		virtual ~userSettingsForm(){}
+		virtual ~userSettingsForm() throw(){}
 
 		//Received events
 		void receivedClicked(os::smart_ptr<element> elm);

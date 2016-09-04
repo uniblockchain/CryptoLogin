@@ -1,7 +1,7 @@
 /**
  * @file	listUsers.cpp
  * @author	Jonathan Bedard
- * @date   	4/21/2016
+ * @date   	8/28/2016
  * @brief	Implementation of user-list form
  * @bug	None
  *
@@ -17,7 +17,7 @@
 
 #include "cryptoLoginLog.h"
 #include "listUsersForm.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 
 using namespace gl;
 
@@ -91,7 +91,7 @@ namespace login
 				mst->metaData.defaultPassword="";
 				mst->metaData.needsBinding=true;
 			}
-			mst->metaData.users.findDelete(_user);
+			mst->metaData.users.remove(_user);
 			mst->metaData.markChanged();
 			mst->needRefresh=true;
 			return;
@@ -140,29 +140,29 @@ namespace login
 	{
 		metaData.checkUserData();
 
-		frameDisplay=os::smartSet<userFrame>();
-		auto trc=metaData.users.getLast();
+		frameDisplay=os::pointerSet<userFrame>();
+		auto trc=metaData.users.last();
 		int ty=10;
 		while(trc)
 		{
-			os::smart_ptr<userFrame> usr(new userFrame(*this,trc->getData()),os::shared_type);
+			os::smart_ptr<userFrame> usr(new userFrame(*this,&trc),os::shared_type);
 			usr->setX(30);
 			ty+=10+usr->height();
 			
 			addMouseListener(usr.get());
 			addKeyboardListener(usr.get());
 			frameDisplay.insert(usr);
-			trc=trc->getPrev();
+			--trc;
 		}
 		if(ty>scrArea.height())
 			scrArea.scrollZone().setHeight(ty);
 		else
 			scrArea.scrollZone().setHeight(scrArea.height());
 		ty=0;
-		for(auto i=frameDisplay.getLast();i;i=i->getPrev())
+		for(auto i=frameDisplay.last();i;--i)
 		{
-			ty+=10+i->getData()->height();
-			i->getData()->setY(scrArea.scrollZone().height()-ty);
+			ty+=10+i->height();
+			i->setY(scrArea.scrollZone().height()-ty);
 		}
 		scrArea.resize();
 	}

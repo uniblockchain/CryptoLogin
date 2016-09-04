@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	4/21/2016
+ * @date   	8/29/2016
  * @brief	Implements the user creation form
  * @bug	None
  *
@@ -16,7 +16,7 @@
 
 #include "cryptoLoginLog.h"
 #include "loginMain.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 
 using namespace gl;
 

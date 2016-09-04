@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	5/26/2016
+ * @date   	8/29/2016
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -16,7 +16,7 @@
 
 #include "cryptoLoginLog.h"
 #include "loginMetaData.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 #include <sstream>
 
 namespace login
@@ -44,7 +44,7 @@ namespace login
 		_currentUser=cpy._currentUser;
 
 		_savePath=cpy._savePath;
-		users.insert(&cpy.users);
+		users.insertStructure(cpy.users);
 		os::testCreateFolder(_savePath);
 		markChanged();
 
@@ -71,19 +71,19 @@ namespace login
 
 		//User list
 		lv1=os::smartXMLNode(new os::XML_Node("users"),os::shared_type);
-		for(auto it=users.getFirst();it;it=it->getNext())
+		for(auto it=users.first();it;++it)
 		{
 			lv2=os::smartXMLNode(new os::XML_Node("user"),os::shared_type);
 			os::smartXMLNode lv3=os::smartXMLNode(new os::XML_Node("name"),os::shared_type);
-			lv3->setData(it->getData()->username);
+			lv3->setData(it->username);
 			lv2->addElement(lv3);
 
 			lv3=os::smartXMLNode(new os::XML_Node("password"),os::shared_type);
-			lv3->setData(it->getData()->password);
+			lv3->setData(it->password);
 			lv2->addElement(lv3);
 
 			lv3=os::smartXMLNode(new os::XML_Node("timestamp"),os::shared_type);
-			lv3->setData(std::to_string((long long unsigned int)it->getData()->timestamp));
+			lv3->setData(std::to_string((long long unsigned int)it->timestamp));
 			lv2->addElement(lv3);
 
 			lv1->addElement(lv2);
@@ -114,13 +114,13 @@ namespace login
 		}
 
 		//Check all declared users, mark if the directory exists
-		for(auto trc=users.getFirst();trc;trc=trc->getNext())
+		for(auto trc=users.first();trc;++trc)
 		{
-			trc->getData()->userExists=false;
-			for(unsigned int i=0;i<arrayLen && !trc->getData()->userExists;++i)
+			trc->userExists=false;
+			for(unsigned int i=0;i<arrayLen && !trc->userExists;++i)
 			{
-				if(arr[i]==trc->getData()->username)
-					trc->getData()->userExists=true;
+				if(arr[i]==trc->username)
+					trc->userExists=true;
 			}
 		}
 		lock.unlock();
@@ -141,51 +141,51 @@ namespace login
 			os::smartXMLNodeList searchList=xmNode->findElement("saved");
 			if(!searchList) throw -1;
 			if(searchList->size()!=1) throw -1;
-			os::smartXMLNode saveNode=searchList->getFirst()->getData();
+			os::smartXMLNode saveNode=&searchList->first();
 
 			searchList=saveNode->findElement("username");
 			if(!searchList) throw -1;
 			if(searchList->size()!=1) throw -1;
-			defaultUsername=searchList->getFirst()->getData()->getData();
+			defaultUsername=searchList->first()->getData();
 
 			searchList=saveNode->findElement("password");
 			if(!searchList) throw -1;
 			if(searchList->size()!=1) throw -1;
-			defaultPassword=searchList->getFirst()->getData()->getData();
+			defaultPassword=searchList->first()->getData();
 
 			//Find all users
 			searchList=xmNode->findElement("users");
 			if(!searchList) throw -1;
 			if(searchList->size()!=1) throw -1;
-			os::smartXMLNode usrList=searchList->getFirst()->getData();
+			os::smartXMLNode usrList=&searchList->first();
 			searchList=usrList->findElement("user");
 			if(!searchList) throw -1;
 
 			//Iterate through user list
-			for(auto it=searchList->getFirst();it;it=it->getNext())
+			for(auto it=searchList->first();it;++it)
 			{
 				try
 				{
 					//Find name
-					os::smartXMLNodeList usrList=it->getData()->findElement("name");
+					os::smartXMLNodeList usrList=it->findElement("name");
 					if(!usrList) throw -1;
 					if(usrList->size()!=1) throw -1;
-					os::smart_ptr<userNode> insNode(new userNode(usrList->getFirst()->getData()->getData()));
-                    os::smart_ptr<os::adnode<userNode> > temp=users.find(insNode);
+					os::smart_ptr<userNode> insNode(new userNode(usrList->first()->getData()));
+                    auto temp=users.search(insNode);
 					if(temp)
-						insNode=temp->getData();
+						insNode=&temp;
 
 					//Search password
-					usrList=it->getData()->findElement("password");
+					usrList=it->findElement("password");
 					if(!usrList) throw -1;
 					if(usrList->size()!=1) throw -1;
-					insNode->password=usrList->getFirst()->getData()->getData();
+					insNode->password=usrList->first()->getData();
 
 					//Search timestamp
-					usrList=it->getData()->findElement("timestamp");
+					usrList=it->findElement("timestamp");
 					if(!usrList) throw -1;
 					if(usrList->size()!=1) throw -1;
-					std::stringstream(usrList->getFirst()->getData()->getData())>>insNode->timestamp;
+					std::stringstream(usrList->first()->getData())>>insNode->timestamp;
 
 					users.insert(insNode);
 				}
@@ -217,9 +217,9 @@ namespace login
 	os::smart_ptr<userNode> loginMetaData::findUser(std::string usr)
 	{
 
-		auto fnd= users.find(os::smart_ptr<userNode>(new userNode(usr),os::shared_type));
+		auto fnd= users.search(os::smart_ptr<userNode>(new userNode(usr),os::shared_type));
 		if(!fnd) return NULL;
-		return fnd->getData();
+		return &fnd;
 	}
 
 	//Create a user which does not exists

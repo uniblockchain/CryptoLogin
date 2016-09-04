@@ -18,7 +18,7 @@
 
 #include "cryptoLoginLog.h"
 #include "loginMain.h"
-#include "osMechanics.h"
+#include "osMechanics/osMechanics.h"
 
 static std::string _loginPath="";
 
