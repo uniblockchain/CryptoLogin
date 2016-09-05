@@ -56,9 +56,9 @@ MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = NO
 
-GENERATE_HTML			= NO
-GENERATE_RTF			= NO
-SEARCHENGINE			= NO
+GENERATE_HTML			= YES
+GENERATE_RTF			= YES
+SEARCHENGINE			= YES
 
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
