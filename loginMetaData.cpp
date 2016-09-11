@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	8/29/2016
+ * @date   	9/10/2016
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -53,42 +53,42 @@ namespace login
 	}
 	
 	//Generate save tree
-	os::smartXMLNode loginMetaData::generateSaveTree()
+	os::smart_ptr<os::XMLNode> loginMetaData::generateSaveTree()
 	{
 		lock.increment();
-		os::smartXMLNode head=os::smartXMLNode(new os::XML_Node("loginData"),os::shared_type);
+		os::smart_ptr<os::XMLNode> head=os::smart_ptr<os::XMLNode>(new os::XMLNode("loginData"),os::shared_type);
 
 		//Saved meta-data
-		os::smartXMLNode lv1=os::smartXMLNode(new os::XML_Node("saved"),os::shared_type);
-		os::smartXMLNode lv2=os::smartXMLNode(new os::XML_Node("username"),os::shared_type);
+		os::smart_ptr<os::XMLNode> lv1=os::smart_ptr<os::XMLNode>(new os::XMLNode("saved"),os::shared_type);
+		os::smart_ptr<os::XMLNode> lv2=os::smart_ptr<os::XMLNode>(new os::XMLNode("username"),os::shared_type);
 		lv2->setData(defaultUsername);
-		lv1->addElement(lv2);
+		lv1->addChild(*lv2);
 
-		lv2=os::smartXMLNode(new os::XML_Node("password"),os::shared_type);
+		lv2=os::smart_ptr<os::XMLNode>(new os::XMLNode("password"),os::shared_type);
 		lv2->setData(defaultPassword);
-		lv1->addElement(lv2);
-		head->addElement(lv1);
+		lv1->addChild(*lv2);
+		head->addChild(*lv1);
 
 		//User list
-		lv1=os::smartXMLNode(new os::XML_Node("users"),os::shared_type);
+		lv1=os::smart_ptr<os::XMLNode>(new os::XMLNode("users"),os::shared_type);
 		for(auto it=users.first();it;++it)
 		{
-			lv2=os::smartXMLNode(new os::XML_Node("user"),os::shared_type);
-			os::smartXMLNode lv3=os::smartXMLNode(new os::XML_Node("name"),os::shared_type);
+			lv2=os::smart_ptr<os::XMLNode>(new os::XMLNode("user"),os::shared_type);
+			os::smart_ptr<os::XMLNode> lv3=os::smart_ptr<os::XMLNode>(new os::XMLNode("name"),os::shared_type);
 			lv3->setData(it->username);
-			lv2->addElement(lv3);
+			lv2->addChild(*lv3);
 
-			lv3=os::smartXMLNode(new os::XML_Node("password"),os::shared_type);
+			lv3=os::smart_ptr<os::XMLNode>(new os::XMLNode("password"),os::shared_type);
 			lv3->setData(it->password);
-			lv2->addElement(lv3);
+			lv2->addChild(*lv3);
 
-			lv3=os::smartXMLNode(new os::XML_Node("timestamp"),os::shared_type);
+			lv3=os::smart_ptr<os::XMLNode>(new os::XMLNode("timestamp"),os::shared_type);
 			lv3->setData(std::to_string((long long unsigned int)it->timestamp));
-			lv2->addElement(lv3);
+			lv2->addChild(*lv3);
 
-			lv1->addElement(lv2);
+			lv1->addChild(*lv2);
 		}
-		head->addElement(lv1);
+		head->addChild(*lv1);
 		lock.decrement();
 
 		return head;
@@ -129,7 +129,7 @@ namespace login
 	void loginMetaData::load()
 	{
 		lock.lock();
-		os::smartXMLNode xmNode=os::XML_Input(_savePath+"/"+META_FILE);
+        os::smart_ptr<os::XMLNode> xmNode(new os::XMLNode(os::XMLNode::read(_savePath+"/"+META_FILE)), os::shared_type);
 		
 		//Parse read tree
 		try
@@ -138,54 +138,51 @@ namespace login
 			if(!xmNode) throw -1;
 
 			//Find default username and password
-			os::smartXMLNodeList searchList=xmNode->findElement("saved");
-			if(!searchList) throw -1;
-			if(searchList->size()!=1) throw -1;
-			os::smartXMLNode saveNode=&searchList->first();
+			auto searchList=xmNode->searchList("saved");
+			if(searchList.size()!=1) throw -1;
+			os::smart_ptr<os::XMLNode> saveNode=&searchList.first();
 
-			searchList=saveNode->findElement("username");
-			if(!searchList) throw -1;
-			if(searchList->size()!=1) throw -1;
-			defaultUsername=searchList->first()->getData();
+			searchList=saveNode->searchList("username");
+			if(searchList.size()!=1) throw -1;
+			defaultUsername=searchList.first()->data();
 
-			searchList=saveNode->findElement("password");
-			if(!searchList) throw -1;
-			if(searchList->size()!=1) throw -1;
-			defaultPassword=searchList->first()->getData();
+			searchList=saveNode->searchList("password");
+			if(searchList.size()!=1) throw -1;
+			defaultPassword=searchList.first()->data();
 
 			//Find all users
-			searchList=xmNode->findElement("users");
+			searchList=xmNode->searchList("users");
 			if(!searchList) throw -1;
-			if(searchList->size()!=1) throw -1;
-			os::smartXMLNode usrList=&searchList->first();
-			searchList=usrList->findElement("user");
+			if(searchList.size()!=1) throw -1;
+			os::smart_ptr<os::XMLNode> usrList=&searchList.first();
+			searchList=usrList->searchList("user");
 			if(!searchList) throw -1;
 
 			//Iterate through user list
-			for(auto it=searchList->first();it;++it)
+			for(auto it=searchList.first();it;++it)
 			{
 				try
 				{
 					//Find name
-					os::smartXMLNodeList usrList=it->findElement("name");
+					auto usrList=it->searchList("name");
 					if(!usrList) throw -1;
-					if(usrList->size()!=1) throw -1;
-					os::smart_ptr<userNode> insNode(new userNode(usrList->first()->getData()));
+					if(usrList.size()!=1) throw -1;
+					os::smart_ptr<userNode> insNode(new userNode(usrList.first()->data()));
                     auto temp=users.search(insNode);
 					if(temp)
 						insNode=&temp;
 
 					//Search password
-					usrList=it->findElement("password");
+					usrList=it->searchList("password");
 					if(!usrList) throw -1;
-					if(usrList->size()!=1) throw -1;
-					insNode->password=usrList->first()->getData();
+					if(usrList.size()!=1) throw -1;
+					insNode->password=usrList.first()->data();
 
 					//Search timestamp
-					usrList=it->findElement("timestamp");
+					usrList=it->searchList("timestamp");
 					if(!usrList) throw -1;
-					if(usrList->size()!=1) throw -1;
-					std::stringstream(usrList->first()->getData())>>insNode->timestamp;
+					if(usrList.size()!=1) throw -1;
+					std::stringstream(usrList.first()->data())>>insNode->timestamp;
 
 					users.insert(insNode);
 				}
@@ -205,7 +202,7 @@ namespace login
 	void loginMetaData::save()
 	{
 		lock.increment();
-		os::XML_Output(_savePath+"/"+META_FILE,generateSaveTree());
+        os::XMLNode::write(_savePath+"/"+META_FILE,*generateSaveTree());
 		savingGroup::save();
 		finishedSaving();
 		lock.decrement();

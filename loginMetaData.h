@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	7/4/2016
+ * @date   	9/10/2016
  * @brief	Contains meta-data for login form
  * @bug	None
  *
@@ -102,7 +102,7 @@ namespace login{
 		/** @brief Generate a new save tree
 		 * @return XML tree to be saved
 		 */
-		os::smartXMLNode generateSaveTree();
+        os::smart_ptr<os::XMLNode> generateSaveTree();
 	public:
 		/** @brief List of current users
 		 * Stores all users in a list to
