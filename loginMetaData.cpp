@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	9/10/2016
+ * @date   	9/22/2016
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -129,11 +129,12 @@ namespace login
 	void loginMetaData::load()
 	{
 		lock.lock();
-        os::smart_ptr<os::XMLNode> xmNode(new os::XMLNode(os::XMLNode::read(_savePath+"/"+META_FILE)), os::shared_type);
 		
 		//Parse read tree
 		try
 		{
+            os::smart_ptr<os::XMLNode> xmNode(new os::XMLNode(os::XMLNode::read(_savePath+"/"+META_FILE)), os::shared_type);
+            
 			//Jump out
 			if(!xmNode) throw -1;
 
