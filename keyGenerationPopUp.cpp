@@ -1,7 +1,7 @@
 /**
  * @file	keyGenerationPopUp.cpp
  * @author	Jonathan Bedard
- * @date   	5/8/2016
+ * @date   	12/21/2016
  * @brief	Key generation pop-up
  * @bug	None
  *
@@ -120,7 +120,11 @@ namespace login
 		username=_username;
 		password=_password;
 
-		new os::singleAction(os::savable::getThread(),&load_user_thread,this);
+        #ifdef ADVANCED_DATASTRUCTURES
+		new os::singleAction(os::savable::getThread(),load_user_thread,this);
+        #else
+        new os::singleAction(os::savable::getThread(),&load_user_thread,this);
+        #endif
 	}
 	void userLoadingPopUp::update()
 	{
