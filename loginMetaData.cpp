@@ -1,7 +1,7 @@
 /**
  * @file	loginMetaData.h
  * @author	Jonathan Bedard
- * @date   	9/22/2016
+ * @date   	1/2/2017
  * @brief	Impliments login-form meta-data
  * @bug	None
  *
@@ -153,11 +153,10 @@ namespace login
 
 			//Find all users
 			searchList=xmNode->searchList("users");
-			if(!searchList) throw -1;
 			if(searchList.size()!=1) throw -1;
 			os::smart_ptr<os::XMLNode> usrList=&searchList.first();
 			searchList=usrList->searchList("user");
-			if(!searchList) throw -1;
+			if(searchList.size()==0) throw -1;
 
 			//Iterate through user list
 			for(auto it=searchList.first();it;++it)
@@ -166,7 +165,6 @@ namespace login
 				{
 					//Find name
 					auto usrList=it->searchList("name");
-					if(!usrList) throw -1;
 					if(usrList.size()!=1) throw -1;
 					os::smart_ptr<userNode> insNode(new userNode(usrList.first()->data()));
                     auto temp=users.search(insNode);
@@ -175,13 +173,11 @@ namespace login
 
 					//Search password
 					usrList=it->searchList("password");
-					if(!usrList) throw -1;
 					if(usrList.size()!=1) throw -1;
 					insNode->password=usrList.first()->data();
 
 					//Search timestamp
 					usrList=it->searchList("timestamp");
-					if(!usrList) throw -1;
 					if(usrList.size()!=1) throw -1;
 					std::stringstream(usrList.first()->data())>>insNode->timestamp;
 
