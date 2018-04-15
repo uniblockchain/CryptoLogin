@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	8/29/2016
+ * @date   	4/15/2018
  * @brief	Implements key management form
  * @bug	None
  *
@@ -12,7 +12,7 @@
 
 ///@cond INTERNAL
 
-#ifndef MANAGE_KEYS_FORM_CPP
+#ifndef CREATE_USER_FORM_CPP
 #define CREATE_USER_FORM_CPP
 
 #include "cryptoLoginLog.h"

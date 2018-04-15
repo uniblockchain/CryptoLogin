@@ -1,7 +1,7 @@
 /**
  * @file	listUsers.cpp
  * @author	Jonathan Bedard
- * @date   	8/28/2016
+ * @date   	4/15/2018
  * @brief	Implementation of user-list form
  * @bug	None
  *
@@ -112,7 +112,7 @@ namespace login
 
 	//Create user constructor
 	listUsers::listUsers(gl::form* master,std::string baseTitle,loginMetaData& metaDataPointer):gl::navForm(master),
-		metaData(metaDataPointer),scrArea(this)
+		scrArea(this),metaData(metaDataPointer)
 	{
 		//Set up basics
 		setTitle(baseTitle+": List User");

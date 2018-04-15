@@ -1,7 +1,7 @@
 /**
  * @file	createUserForm.cpp
  * @author	Jonathan Bedard
- * @date   	8/29/2016
+ * @date   	4/15/2018
  * @brief	Implements the user creation form
  * @bug	None
  *
@@ -28,7 +28,7 @@ namespace login
 		lblPassword1(this),tbxPassword1(this),indPassword(this),
 		lblPassword2(this),tbxPassword2(this),
 		btnRSA128(this),btnRSA256(this),btnRSA512(this),
-		btnQuit(this),btnCreate(this),metaData(md)
+		btnCreate(this),btnQuit(this),metaData(md)
 	{
 		setTitle(baseTitle+": New User");
 		
